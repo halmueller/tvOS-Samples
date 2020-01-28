@@ -17,17 +17,17 @@ class AlertsViewController: UIViewController {
         let message = NSLocalizedString("A message should be a short, complete sentence.", comment: "")
         let acceptButtonTitle = NSLocalizedString("OK", comment: "")
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         // Create the action.
-        let acceptAction = UIAlertAction(title: acceptButtonTitle, style: .Default) { _ in
+        let acceptAction = UIAlertAction(title: acceptButtonTitle, style: .default) { _ in
             print("The simple alert's accept action occurred.")
         }
         
         // Add the action.
         alertController.addAction(acceptAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     /// Shows an alert with "OK" and "Cancel" buttons.
@@ -37,14 +37,14 @@ class AlertsViewController: UIViewController {
         let acceptButtonTitle = NSLocalizedString("OK", comment: "")
         let cancelButtonTitle = NSLocalizedString("Cancel", comment: "")
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
 
         // Create the actions.
-        let acceptAction = UIAlertAction(title: acceptButtonTitle, style: .Default) { _ in
+        let acceptAction = UIAlertAction(title: acceptButtonTitle, style: .default) { _ in
             print("The \"OK/Cancel\" alert's other action occurred.")
         }
         
-        let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .Cancel) { _ in
+        let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .cancel) { _ in
             print("The \"OK/Cancel\" alert's cancel action occurred.")
         }
         
@@ -52,7 +52,7 @@ class AlertsViewController: UIViewController {
         alertController.addAction(acceptAction)
         alertController.addAction(cancelAction)
 
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     /// Show an alert with "Delete" and "Cancel" buttons.
@@ -62,14 +62,14 @@ class AlertsViewController: UIViewController {
         let cancelButtonTitle = NSLocalizedString("Cancel", comment: "")
         let deleteButtonTitle = NSLocalizedString("Delete", comment: "")
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         // Create the actions.
-        let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .Cancel) { _ in
+        let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .cancel) { _ in
             print("The \"Other\" alert's cancel action occurred.")
         }
         
-        let deleteAction = UIAlertAction(title: deleteButtonTitle, style: .Destructive) { _ in
+        let deleteAction = UIAlertAction(title: deleteButtonTitle, style: .destructive) { _ in
             print("The \"Other\" alert's other button one action occurred.")
         }
         
@@ -77,6 +77,6 @@ class AlertsViewController: UIViewController {
         alertController.addAction(cancelAction)
         alertController.addAction(deleteAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 }

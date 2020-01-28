@@ -27,25 +27,25 @@ struct DataItem: Equatable {
     let number: Int
     
     var title: String {
-        return "\(group.rawValue) \(DataItem.numberFormatter.stringFromNumber(number)!)"
+        return "\(group.rawValue) \(DataItem.numberFormatter.string(from: number as NSNumber)!)"
     }
     
     var identifier: String {
         return "\(group.rawValue).\(number)"
     }
     
-    var displayURL: NSURL {
-        let components = NSURLComponents()
+    var displayURL: URL {
+        var components = URLComponents()
         components.scheme = "uikitcatalog"
         components.path = "dataItem"
-        components.queryItems = [NSURLQueryItem(name: "identifier", value: identifier)]
+        components.queryItems = [URLQueryItem(name: "identifier", value: identifier)]
         
-        return components.URL!
+        return components.url!
     }
     
-    var imageURL: NSURL {
-        let mainBundle = NSBundle.mainBundle()
-        guard let imageURL = mainBundle.URLForResource(imageName, withExtension: nil) else { fatalError("Error determining local image URL.") }
+    var imageURL: URL {
+        let mainBundle = Bundle.main
+        guard let imageURL = mainBundle.url(forResource: imageName, withExtension: nil) else { fatalError("Error determining local image URL.") }
         
         return imageURL
     }
@@ -53,9 +53,9 @@ struct DataItem: Equatable {
     // MARK: Convenience
     
     /// A static `NSNumberFormatter` used to create a localized title for the `DataItem`.
-    private static var numberFormatter: NSNumberFormatter = {
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .SpellOutStyle
+    fileprivate static var numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .spellOut
         
         return formatter
     }()

@@ -12,18 +12,18 @@ class DataItemCellComposer {
     // MARK: Properties
     
     /// Cache used to store processed images, keyed on `DataItem` identifiers.
-    static private var processedImageCache = NSCache()
+    static fileprivate var processedImageCache = NSCache<AnyObject, AnyObject>()
     
     /**
         A dictionary of `NSOperationQueue`s for `DataItemCollectionViewCell`s. The
         queues contain operations that process images for `DataItem`s before updating
         the cell's `UIImageView`.
     */
-    private var operationQueues = [DataItemCollectionViewCell: NSOperationQueue]()
+    fileprivate var operationQueues = [DataItemCollectionViewCell: OperationQueue]()
 
     // MARK: Implementation
     
-    func composeCell(cell: DataItemCollectionViewCell, withDataItem dataItem: DataItem) {
+    func composeCell(_ cell: DataItemCollectionViewCell, withDataItem dataItem: DataItem) {
         // Cancel any queued operations to process images for the cell.
         let operationQueue = operationQueueForCell(cell)
         operationQueue.cancelAllOperations()
@@ -32,7 +32,7 @@ class DataItemCellComposer {
         cell.representedDataItem = dataItem
         cell.label.text = dataItem.title
         cell.imageView.alpha = 1.0
-        cell.imageView.image = DataItemCellComposer.processedImageCache.objectForKey(dataItem.identifier) as? UIImage
+        cell.imageView.image = DataItemCellComposer.processedImageCache.object(forKey: dataItem.identifier as AnyObject) as? UIImage
         
         // No further work is necessary if the cell's image view has an image.
         guard cell.imageView.image == nil else { return }
@@ -45,19 +45,19 @@ class DataItemCellComposer {
             The execution block is added after the operation is created to allow
             the block to check if the operation has been cancelled.
         */
-        let processImageOperation = NSBlockOperation()
+        let processImageOperation = BlockOperation()
         
         processImageOperation.addExecutionBlock { [unowned processImageOperation] in
             // Ensure the operation has not been cancelled.
-            guard !processImageOperation.cancelled else { return }
+            guard !processImageOperation.isCancelled else { return }
             
             // Load and process the image.
             guard let image = self.processImageNamed(dataItem.imageName) else { return }
             
             // Store the processed image in the cache.
-            DataItemCellComposer.processedImageCache.setObject(image, forKey: dataItem.identifier)
+            DataItemCellComposer.processedImageCache.setObject(image, forKey: dataItem.identifier as AnyObject)
             
-            NSOperationQueue.mainQueue().addOperationWithBlock {
+            OperationQueue.main.addOperation {
                 // Check that the cell is still showing the same `DataItem`.
                 guard dataItem == cell.representedDataItem else { return }
 
@@ -65,9 +65,9 @@ class DataItemCellComposer {
                 cell.imageView.alpha = 0.0
                 cell.imageView.image = image
                 
-                UIView.animateWithDuration(0.25) {
+                UIView.animate(withDuration: 0.25, animations: {
                     cell.imageView.alpha = 1.0
-                }
+                }) 
             }
         }
         
@@ -80,12 +80,12 @@ class DataItemCellComposer {
         Returns the `NSOperationQueue` for a given cell. Creates and stores a new
         queue if one doesn't already exist.
     */
-    private func operationQueueForCell(cell: DataItemCollectionViewCell) -> NSOperationQueue {
+    fileprivate func operationQueueForCell(_ cell: DataItemCollectionViewCell) -> OperationQueue {
         if let queue = operationQueues[cell] {
             return queue
         }
         
-        let queue = NSOperationQueue()
+        let queue = OperationQueue()
         operationQueues[cell] = queue
         
         return queue
@@ -95,7 +95,7 @@ class DataItemCellComposer {
         Loads a UIImage for a given name and returns a version that has been drawn
         into a `CGBitmapContext`.
     */
-    private func processImageNamed(imageName: String) -> UIImage? {
+    fileprivate func processImageNamed(_ imageName: String) -> UIImage? {
         // Load the image.
         guard let image = UIImage(named: imageName) else { return nil }
         
@@ -107,22 +107,22 @@ class DataItemCellComposer {
         
         // Create a `CGColorSpace` and `CGBitmapInfo` value that is appropriate for the device.
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo = CGImageAlphaInfo.PremultipliedLast.rawValue | CGBitmapInfo.ByteOrder32Little.rawValue
+        let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
         
         // Create a bitmap context of the same size as the image.
         let imageWidth = Int(Float(image.size.width))
         let imageHeight = Int(Float(image.size.height))
         
-        let bitmapContext = CGBitmapContextCreate(nil, imageWidth, imageHeight, 8, imageWidth * 4, colorSpace, bitmapInfo)
+        let bitmapContext = CGContext(data: nil, width: imageWidth, height: imageHeight, bitsPerComponent: 8, bytesPerRow: imageWidth * 4, space: colorSpace, bitmapInfo: bitmapInfo)
         
         // Draw the image into the graphics context.
-        guard let imageRef = image.CGImage else { fatalError("Unable to get a CGImage from a UIImage.") }
-        CGContextDrawImage(bitmapContext, CGRect(origin: CGPoint.zero, size: image.size), imageRef)
+        guard let imageRef = image.cgImage else { fatalError("Unable to get a CGImage from a UIImage.") }
+        bitmapContext?.draw(imageRef, in: CGRect(origin: CGPoint.zero, size: image.size))
         
         // Create a new `CGImage` from the contents of the graphics context.
-        guard let newImageRef = CGBitmapContextCreateImage(bitmapContext) else { return image }
+        guard let newImageRef = bitmapContext?.makeImage() else { return image }
         
         // Return a new `UIImage` created from the `CGImage`.
-        return UIImage(CGImage: newImageRef)
+        return UIImage(cgImage: newImageRef)
     }
 }

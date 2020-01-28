@@ -19,9 +19,9 @@ class GradientMaskView: UIView {
     }
 
     /// The `CAGradientLayer` responsible for drawing the alpha gradient.
-    private let gradientLayer: CAGradientLayer = {
+    fileprivate let gradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
-        layer.colors = [UIColor(white: 0.0, alpha: 0.0).CGColor, UIColor(white: 0.0, alpha: 1.0).CGColor]
+        layer.colors = [UIColor(white: 0.0, alpha: 0.0).cgColor, UIColor(white: 0.0, alpha: 1.0).cgColor]
         
         return layer
     }()
@@ -56,7 +56,7 @@ class GradientMaskView: UIView {
     
     // MARK: Convenience
     
-    private func updateGradientLayer() {
+    fileprivate func updateGradientLayer() {
         // Update the `gradientLayer` frame to match the view's bounds.
         gradientLayer.frame = CGRect(origin: CGPoint.zero, size: bounds.size)
         
@@ -64,6 +64,6 @@ class GradientMaskView: UIView {
             Update the `gradientLayer`'s gradient locations with the `maskPosition`
             converted to the `gradientLayer`'s unit coordinate space.
         */
-        gradientLayer.locations = [maskPosition.end / bounds.size.height, maskPosition.start / bounds.size.height]
+        gradientLayer.locations = [maskPosition.end / bounds.size.height as NSNumber, maskPosition.start / bounds.size.height as NSNumber]
     }
 }

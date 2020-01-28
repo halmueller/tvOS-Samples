@@ -23,7 +23,7 @@ class ButtonsViewController: UIViewController {
     
     // MARK: IB Actions
     
-    @IBAction func buttonClicked(sender: AnyObject) {
+    @IBAction func buttonClicked(_ sender: AnyObject) {
         /*
             Clicking a button fires a UIControlEventPrimaryActionTriggered event.
             The buttons in this view controller have been setup in Interface Builder
@@ -34,23 +34,23 @@ class ButtonsViewController: UIViewController {
     
     // MARK: Convenience
     
-    private func configureAttributedTextSystemButton() {
+    fileprivate func configureAttributedTextSystemButton() {
         let buttonTitle = NSLocalizedString("Button", comment: "")
         
         // Set the button's title for normal state.
         let normalTitleAttributes = [
-            NSForegroundColorAttributeName: UIColor.blueColor(),
-            NSStrikethroughStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue
-        ]
+            NSForegroundColorAttributeName: UIColor.blue,
+            NSStrikethroughStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue
+        ] as [String : Any]
         let normalAttributedTitle = NSAttributedString(string: buttonTitle, attributes: normalTitleAttributes)
-        attributedTextButton.setAttributedTitle(normalAttributedTitle, forState: .Normal)
+        attributedTextButton.setAttributedTitle(normalAttributedTitle, for: UIControlState())
         
         // Set the button's title for highlighted state.
         let highlightedTitleAttributes = [
-            NSForegroundColorAttributeName: UIColor.greenColor(),
-            NSStrikethroughStyleAttributeName: NSUnderlineStyle.StyleThick.rawValue
-        ]
+            NSForegroundColorAttributeName: UIColor.green,
+            NSStrikethroughStyleAttributeName: NSUnderlineStyle.styleThick.rawValue
+        ] as [String : Any]
         let highlightedAttributedTitle = NSAttributedString(string: buttonTitle, attributes: highlightedTitleAttributes)
-        attributedTextButton.setAttributedTitle(highlightedAttributedTitle, forState: .Highlighted)
+        attributedTextButton.setAttributedTitle(highlightedAttributedTitle, for: .highlighted)
     }
 }

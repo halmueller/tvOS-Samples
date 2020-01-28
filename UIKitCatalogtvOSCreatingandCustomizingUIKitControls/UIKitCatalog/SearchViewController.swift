@@ -10,13 +10,13 @@ import UIKit
 
 class SearchViewController: UIViewController, UISearchControllerDelegate {
     
-    @IBAction func showSearchController(sender: AnyObject) {
+    @IBAction func showSearchController(_ sender: AnyObject) {
         /*
             Instantiate an instance of a `SearchResultsViewController` from the
             storyboard. This will be used by the `UISearchController` to display
             search results.
         */
-        guard let resultsController = storyboard?.instantiateViewControllerWithIdentifier(SearchResultsViewController.storyboardIdentifier) as? SearchResultsViewController else { fatalError("Unable to instantiate a SearchResultsViewController.") }
+        guard let resultsController = storyboard?.instantiateViewController(withIdentifier: SearchResultsViewController.storyboardIdentifier) as? SearchResultsViewController else { fatalError("Unable to instantiate a SearchResultsViewController.") }
         
         // Create and configure a `UISearchController`.
         let searchController = UISearchController(searchResultsController: resultsController)
@@ -28,6 +28,6 @@ class SearchViewController: UIViewController, UISearchControllerDelegate {
      
         // Present the search controller from the root view controller.
         guard let rootViewController = view.window?.rootViewController else { fatalError("Unable to get root view controller.") }
-        rootViewController.presentViewController(searchController, animated: true, completion: nil)
+        rootViewController.present(searchController, animated: true, completion: nil)
     }
 }

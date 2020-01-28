@@ -23,7 +23,7 @@ class CustomInputAccessoryView: UIView {
         super.init(frame: CGRect.zero)
 
         // Setup the label and add it to the view.
-        titleLabel.font = UIFont.systemFontOfSize(60, weight: UIFontWeightMedium)
+        titleLabel.font = UIFont.systemFont(ofSize: 60, weight: UIFontWeightMedium)
         titleLabel.text = title
         
         addSubview(titleLabel)
@@ -40,8 +40,8 @@ class CustomInputAccessoryView: UIView {
             containing view with an additional 60pts of bottom padding.
         */
         let viewsDictionary = ["titleLabel": titleLabel]
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-[titleLabel]-|", options: [], metrics: nil, views: viewsDictionary))
-        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[titleLabel]-60-|", options: [], metrics: nil, views: viewsDictionary))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[titleLabel]-|", options: [], metrics: nil, views: viewsDictionary))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[titleLabel]-60-|", options: [], metrics: nil, views: viewsDictionary))
     }
 
     required init?(coder aDecoder: NSCoder) {

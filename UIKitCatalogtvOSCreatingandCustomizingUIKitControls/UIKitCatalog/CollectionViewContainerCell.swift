@@ -15,9 +15,9 @@ class CollectionViewContainerCell: UICollectionViewCell, UICollectionViewDataSou
     
     @IBOutlet var collectionView: UICollectionView!
     
-    private var dataItems = [DataItem]()
+    fileprivate var dataItems = [DataItem]()
     
-    private let cellComposer = DataItemCellComposer()
+    fileprivate let cellComposer = DataItemCellComposer()
     
     override var preferredFocusedView: UIView? {
         return collectionView
@@ -25,28 +25,28 @@ class CollectionViewContainerCell: UICollectionViewCell, UICollectionViewDataSou
     
     // MARK: Configuration
     
-    func configureWithDataItems(dataItems: [DataItem]) {
+    func configureWithDataItems(_ dataItems: [DataItem]) {
         self.dataItems = dataItems
         collectionView.reloadData()
     }
     
     // MARK: UICollectionViewDataSource
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataItems.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCellWithReuseIdentifier(DataItemCollectionViewCell.reuseIdentifier, forIndexPath: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return collectionView.dequeueReusableCell(withReuseIdentifier: DataItemCollectionViewCell.reuseIdentifier, for: indexPath)
     }
     
     // MARK: UICollectionViewDelegate
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? DataItemCollectionViewCell else { fatalError("Expected to display a DataItemCollectionViewCell") }
         let item = dataItems[indexPath.row]
         

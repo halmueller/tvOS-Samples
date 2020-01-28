@@ -15,7 +15,7 @@ class FocusGuidesViewController: UIViewController {
     
     @IBOutlet var bottomLeftButton: UIButton!
     
-    private var focusGuide: UIFocusGuide!
+    fileprivate var focusGuide: UIFocusGuide!
     
     // MARK: UIViewController
     
@@ -30,18 +30,18 @@ class FocusGuidesViewController: UIViewController {
         view.addLayoutGuide(focusGuide)
         
         // Anchor the top left of the focus guide.
-        focusGuide.leftAnchor.constraintEqualToAnchor(topRightButton.leftAnchor).active = true
-        focusGuide.topAnchor.constraintEqualToAnchor(bottomLeftButton.topAnchor).active = true
+        focusGuide.leftAnchor.constraint(equalTo: topRightButton.leftAnchor).isActive = true
+        focusGuide.topAnchor.constraint(equalTo: bottomLeftButton.topAnchor).isActive = true
         
         // Anchor the width and height of the focus guide.
-        focusGuide.widthAnchor.constraintEqualToAnchor(topRightButton.widthAnchor).active = true
-        focusGuide.heightAnchor.constraintEqualToAnchor(bottomLeftButton.heightAnchor).active = true
+        focusGuide.widthAnchor.constraint(equalTo: topRightButton.widthAnchor).isActive = true
+        focusGuide.heightAnchor.constraint(equalTo: bottomLeftButton.heightAnchor).isActive = true
     }
 
     // MARK: UIFocusEnvironment
     
-    override func didUpdateFocusInContext(context: UIFocusUpdateContext, withAnimationCoordinator coordinator: UIFocusAnimationCoordinator) {
-        super.didUpdateFocusInContext(context, withAnimationCoordinator: coordinator)
+    override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        super.didUpdateFocus(in: context, with: coordinator)
         
         /*
             Update the focus guide's `preferredFocusedView` depending on which

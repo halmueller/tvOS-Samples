@@ -11,19 +11,19 @@ import UIKit
 class AlertFormViewController: UIViewController {
     // MARK: Properties
     
-    private weak var secureTextAlertAction: UIAlertAction?
+    fileprivate weak var secureTextAlertAction: UIAlertAction?
     
     // MARK: IB Actions
     
-    @IBAction func showSimpleForm(sender: AnyObject) {
+    @IBAction func showSimpleForm(_ sender: AnyObject) {
         let title = NSLocalizedString("A Short Title is Best", comment: "")
         let message = NSLocalizedString("A message should be a short, complete sentence.", comment: "")
         let acceptButtonTitle = NSLocalizedString("OK", comment: "")
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         // Add two text fields for text entry.
-        alertController.addTextFieldWithConfigurationHandler { textField in
+        alertController.addTextField { textField in
             // Customize the text field.
             textField.placeholder = NSLocalizedString("Name", comment: "")
             
@@ -32,9 +32,9 @@ class AlertFormViewController: UIViewController {
             textField.inputAccessoryView = inputAccessoryView
         }
 
-        alertController.addTextFieldWithConfigurationHandler { textField in
+        alertController.addTextField { textField in
             // Customize the text field.
-            textField.keyboardType = .EmailAddress
+            textField.keyboardType = .emailAddress
             textField.placeholder = NSLocalizedString("example@example.com", comment: "")
             
             // Specify a custom input accessory view with a descriptive title.
@@ -43,7 +43,7 @@ class AlertFormViewController: UIViewController {
         }
 
         // Create the actions.
-        let acceptAction = UIAlertAction(title: acceptButtonTitle, style: .Default) {[unowned alertController] _ in
+        let acceptAction = UIAlertAction(title: acceptButtonTitle, style: .default) {[unowned alertController] _ in
             print("The \"Text Entry\" alert's other action occured.")
             
             if let enteredText = alertController.textFields?.first?.text {
@@ -56,7 +56,7 @@ class AlertFormViewController: UIViewController {
             This will allow us to capture the user clicking the menu button to
             cancel the alert while not showing a specific cancel button.
         */
-        let cancelAction = UIAlertAction(title: nil, style: .Cancel) { _ in
+        let cancelAction = UIAlertAction(title: nil, style: .cancel) { _ in
             print("The \"Text Entry\" alert's cancel action occured.")
         }
         
@@ -64,7 +64,7 @@ class AlertFormViewController: UIViewController {
         alertController.addAction(acceptAction)
         alertController.addAction(cancelAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 
     /**
@@ -73,18 +73,18 @@ class AlertFormViewController: UIViewController {
         The "OK" button is only enabled when at least 5 characters have been
         entered into the text field.
     */
-    @IBAction func showSecureTextEntry(sender: AnyObject) {
+    @IBAction func showSecureTextEntry(_ sender: AnyObject) {
         let title = NSLocalizedString("A Short Title is Best", comment: "")
         let message = NSLocalizedString("A message should be a short, complete sentence.", comment: "")
         let acceptButtonTitle = NSLocalizedString("OK", comment: "")
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         // Add the text field for the secure text entry.
-        alertController.addTextFieldWithConfigurationHandler { textField in
+        alertController.addTextField { textField in
             // Customize the text field.
             textField.placeholder = NSLocalizedString("Password", comment: "")
-            textField.secureTextEntry = true
+            textField.isSecureTextEntry = true
 
             // Specify a custom input accessory view with a descriptive title.
             let inputAccessoryView = CustomInputAccessoryView(title: "Enter at least 5 characters")
@@ -95,11 +95,11 @@ class AlertFormViewController: UIViewController {
                 can toggle the `otherAction` enabled property based on whether the user has
                 entered a long enough string.
             */
-            textField.addTarget(self, action: "handleTextFieldTextDidChangeNotification:", forControlEvents: .EditingChanged)
+            textField.addTarget(self, action: #selector(AlertFormViewController.handleTextFieldTextDidChangeNotification(_:)), for: .editingChanged)
         }
 
         // Create the actions.
-        let acceptAction = UIAlertAction(title: acceptButtonTitle, style: .Default) { _ in
+        let acceptAction = UIAlertAction(title: acceptButtonTitle, style: .default) { _ in
             print("The \"Secure Text Entry\" alert's other action occured.")
         }
         
@@ -108,12 +108,12 @@ class AlertFormViewController: UIViewController {
             This will allow us to capture the user clicking the menu button to
             cancel the alert while not showing a specific cancel button.
         */
-        let cancelAction = UIAlertAction(title: nil, style: .Cancel) { _ in
+        let cancelAction = UIAlertAction(title: nil, style: .cancel) { _ in
             print("The \"Text Entry\" alert's cancel action occured.")
         }
         
         // The text field initially has no text in the text field, so we'll disable it.
-        acceptAction.enabled = false
+        acceptAction.isEnabled = false
         
         /*
             Hold onto the secure text alert action to toggle the enabled / disabled 
@@ -125,16 +125,16 @@ class AlertFormViewController: UIViewController {
         alertController.addAction(acceptAction)
         alertController.addAction(cancelAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: Convenience
     
-    func handleTextFieldTextDidChangeNotification(textField: UITextField) {
+    func handleTextFieldTextDidChangeNotification(_ textField: UITextField) {
         guard let secureTextAlertAction = secureTextAlertAction else { fatalError("secureTextAlertAction has not been set") }
         
         // Enforce a minimum length of >= 5 characters for secure text alerts.
         let text = textField.text ?? ""
-        secureTextAlertAction.enabled = text.characters.count >= 5
+        secureTextAlertAction.isEnabled = text.characters.count >= 5
     }
 }

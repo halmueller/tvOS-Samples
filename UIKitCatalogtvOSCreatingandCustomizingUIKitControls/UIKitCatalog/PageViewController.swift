@@ -10,9 +10,9 @@ import UIKit
 
 class PageViewController: UIPageViewController, UIPageViewControllerDataSource {
 
-    private let dataItems = DataItem.sampleItems.filter { $0.group == .Lola }
+    fileprivate let dataItems = DataItem.sampleItems.filter { $0.group == .Lola }
     
-    private let dataItemViewControllerCache = NSCache()
+    fileprivate let dataItemViewControllerCache = NSCache<AnyObject, AnyObject>()
     
     // MARK: UIViewController
     
@@ -22,12 +22,12 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource {
         dataSource = self
         
         let initialViewController = dataItemViewControllerForPage(0)
-        setViewControllers([initialViewController], direction: .Forward, animated: false, completion: nil)
+        setViewControllers([initialViewController], direction: .forward, animated: false, completion: nil)
     }
 
     // MARK: UIPageViewControllerDataSource
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         let index = indexOfDataItemForViewController(viewController)
         
         if index > 0 {
@@ -38,7 +38,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource {
         }
     }
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         let index = indexOfDataItemForViewController(viewController)
         
         if index < dataItems.count - 1 {
@@ -49,11 +49,11 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource {
         }
     }
     
-    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return dataItems.count
     }
 
-    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         guard let currentViewController = pageViewController.viewControllers?.first else { fatalError("Unable to get the page controller's current view controller.") }
         
         return indexOfDataItemForViewController(currentViewController)
@@ -61,27 +61,27 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource {
     
     // MARK: Convenience
     
-    private func indexOfDataItemForViewController(viewController: UIViewController) -> Int {
+    fileprivate func indexOfDataItemForViewController(_ viewController: UIViewController) -> Int {
         guard let viewController = viewController as? DataItemViewController else { fatalError("Unexpected view controller type in page view controller.") }
-        guard let viewControllerIndex = dataItems.indexOf(viewController.dataItem) else { fatalError("View controller's data item not found.") }
+        guard let viewControllerIndex = dataItems.index(of: viewController.dataItem) else { fatalError("View controller's data item not found.") }
         
         return viewControllerIndex
     }
     
-    private func dataItemViewControllerForPage(pageIndex: Int) -> DataItemViewController {
+    fileprivate func dataItemViewControllerForPage(_ pageIndex: Int) -> DataItemViewController {
         let dataItem = dataItems[pageIndex]
         
-        if let cachedController = dataItemViewControllerCache.objectForKey(dataItem.identifier) as? DataItemViewController {
+        if let cachedController = dataItemViewControllerCache.object(forKey: dataItem.identifier as AnyObject) as? DataItemViewController {
             // Return the cached view controller.
             return cachedController
         }
         else {
             // Instantiate and configure a `DataItemViewController` for the `DataItem`.
-            guard let controller = storyboard?.instantiateViewControllerWithIdentifier(DataItemViewController.storyboardIdentifier) as? DataItemViewController else { fatalError("Unable to instantiate a DataItemViewController.") }
+            guard let controller = storyboard?.instantiateViewController(withIdentifier: DataItemViewController.storyboardIdentifier) as? DataItemViewController else { fatalError("Unable to instantiate a DataItemViewController.") }
             controller.configureWithDataItem(dataItem)
             
             // Cache the view controller so it can be reused.
-            dataItemViewControllerCache.setObject(controller, forKey: dataItem.identifier)
+            dataItemViewControllerCache.setObject(controller, forKey: dataItem.identifier as AnyObject)
             
             // Return the newly created and cached view controller.
             return controller

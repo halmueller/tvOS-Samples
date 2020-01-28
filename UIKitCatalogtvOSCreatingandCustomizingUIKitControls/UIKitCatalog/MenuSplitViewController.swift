@@ -16,7 +16,7 @@ class MenuSplitViewController: UISplitViewController {
         the detail view controller should be the preferred focused view when
         this view controller is next queried.
     */
-    private var preferDetailViewControllerOnNextFocusUpdate = false
+    fileprivate var preferDetailViewControllerOnNextFocusUpdate = false
     
     // MARK: UIFocusEnvironment
     

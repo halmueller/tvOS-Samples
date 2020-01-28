@@ -11,9 +11,9 @@ import UIKit
 class CollectionViewController: UICollectionViewController {
     // MARK: Properties
     
-    private let items = DataItem.sampleItems
+    fileprivate let items = DataItem.sampleItems
     
-    private let cellComposer = DataItemCellComposer()
+    fileprivate let cellComposer = DataItemCellComposer()
     
     // MARK: UIViewController
     
@@ -26,12 +26,12 @@ class CollectionViewController: UICollectionViewController {
             contents of the collection view as it scrolls beneath the transparent
             navigation bar.
         */
-        collectionView.maskView = GradientMaskView(frame: CGRect(origin: CGPoint.zero, size: collectionView.bounds.size))
+        collectionView.mask = GradientMaskView(frame: CGRect(origin: CGPoint.zero, size: collectionView.bounds.size))
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard let collectionView = collectionView, maskView = collectionView.maskView as? GradientMaskView else { return }
+        guard let collectionView = collectionView, let maskView = collectionView.mask as? GradientMaskView else { return }
         
         /*
             Update the mask view to have fully faded out any collection view
@@ -57,23 +57,23 @@ class CollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // The collection view shows all items in a single section.
         return 1
     }
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // Dequeue a cell from the collection view.
-        return collectionView.dequeueReusableCellWithReuseIdentifier(DataItemCollectionViewCell.reuseIdentifier, forIndexPath: indexPath)
+        return collectionView.dequeueReusableCell(withReuseIdentifier: DataItemCollectionViewCell.reuseIdentifier, for: indexPath)
     }
     
     // MARK: UICollectionViewDelegate
     
-    override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? DataItemCollectionViewCell else { fatalError("Expected to display a `DataItemCollectionViewCell`.") }
         let item = items[indexPath.row]
 

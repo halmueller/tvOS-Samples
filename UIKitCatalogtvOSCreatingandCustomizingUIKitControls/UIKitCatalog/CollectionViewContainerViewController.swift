@@ -11,9 +11,9 @@ import UIKit
 class CollectionViewContainerViewController: UICollectionViewController {
     // MARK: Properties
     
-    private static let minimumEdgePadding = CGFloat(90.0)
+    fileprivate static let minimumEdgePadding = CGFloat(90.0)
     
-    private let dataItemsByGroup: [[DataItem]] = {
+    fileprivate let dataItemsByGroup: [[DataItem]] = {
         return DataItem.Group.allGroups.map { group in
             return DataItem.sampleItems.filter { $0.group == group }
         }
@@ -25,7 +25,7 @@ class CollectionViewContainerViewController: UICollectionViewController {
         super.viewDidLoad()
 
         // Make sure their is sufficient padding above and below the content.
-        guard let collectionView = collectionView, layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        guard let collectionView = collectionView, let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         
         collectionView.contentInset.top = CollectionViewContainerViewController.minimumEdgePadding - layout.sectionInset.top
         collectionView.contentInset.bottom = CollectionViewContainerViewController.minimumEdgePadding - layout.sectionInset.bottom
@@ -33,24 +33,24 @@ class CollectionViewContainerViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // Our collection view displays 1 section per group of items.
         return dataItemsByGroup.count
     }
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // Each section contains a single `CollectionViewContainerCell`.
         return 1
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // Dequeue a cell from the collection view.
-        return collectionView.dequeueReusableCellWithReuseIdentifier(CollectionViewContainerCell.reuseIdentifier, forIndexPath: indexPath)
+        return collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewContainerCell.reuseIdentifier, for: indexPath)
     }
     
     // MARK: UICollectionViewDelegate
     
-    override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? CollectionViewContainerCell else { fatalError("Expected to display a `CollectionViewContainerCell`.") }
         
         // Configure the cell.
@@ -58,7 +58,7 @@ class CollectionViewContainerViewController: UICollectionViewController {
         cell.configureWithDataItems(sectionDataItems)
     }
     
-    override func collectionView(collectionView: UICollectionView, canFocusItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
         /*
             Return `false` because we don't want this `collectionView`'s cells to
             become focused. Instead the `UICollectionView` contained in the cell

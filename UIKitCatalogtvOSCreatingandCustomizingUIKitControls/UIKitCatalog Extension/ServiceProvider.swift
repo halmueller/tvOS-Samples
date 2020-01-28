@@ -15,14 +15,14 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
         The style of Top Shelf items to show.
         Modify this property to view different styles.
     */
-    let topShelfStyle: TVTopShelfContentStyle = .Sectioned
+    let topShelfStyle: TVTopShelfContentStyle = .sectioned
     
     var topShelfItems: [TVContentItem] {
         switch topShelfStyle {
-            case .Inset:
+            case .inset:
                 return insetTopShelfItems
             
-            case .Sectioned:
+            case .sectioned:
                 return sectionedTopShelfItems
         }
     }
@@ -30,13 +30,13 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
     // MARK: Convenience
     
     /// An array of `TVContentItem`s to show when `topShelfStyle` returns `.Inset`.
-    private var insetTopShelfItems: [TVContentItem] {
+    fileprivate var insetTopShelfItems: [TVContentItem] {
         // Get an array of `DataItem`s to show on the Top Shelf.
         let itemsToDisplay = DataItem.sampleItemsForInsetTopShelfItems
         
         // Map the array of `DataItem`s to an array of `TVContentItem`s.
         let contentItems: [TVContentItem] = itemsToDisplay.map { dataItem in
-            return contentItemWithDataItem(dataItem, imageShape: .ExtraWide)
+            return contentItemWithDataItem(dataItem, imageShape: .extraWide)
         }
     
         return contentItems
@@ -56,7 +56,7 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
                 - TVContentItem, "Lola one"
                 - TVContentItem, "Lola two"
     */
-    private var sectionedTopShelfItems: [TVContentItem] {
+    fileprivate var sectionedTopShelfItems: [TVContentItem] {
         // Get an array of `DataItem` arrays to show on the Top Shelf.
         let groupedItemsToDisplay = DataItem.sampleItemsForSectionedTopShelfItems
         
@@ -84,7 +84,7 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
                 Top Shelf items.
             */
             sectionItem.topShelfItems = dataItems.map { dataItem in
-                return contentItemWithDataItem(dataItem, imageShape: .Square)
+                return contentItemWithDataItem(dataItem, imageShape: .square)
             }
             
             return sectionItem
@@ -94,13 +94,13 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
     }
 
     /// Returns a `TVContentItem` for a `DataItem`.
-    private func contentItemWithDataItem(dataItem: DataItem, imageShape: TVContentItemImageShape) -> TVContentItem {
+    fileprivate func contentItemWithDataItem(_ dataItem: DataItem, imageShape: TVContentItemImageShape) -> TVContentItem {
         guard let contentIdentifier = TVContentIdentifier(identifier: dataItem.identifier, container: nil) else { fatalError("Error creating content identifier.") }
         guard let contentItem = TVContentItem(contentIdentifier: contentIdentifier) else { fatalError("Error creating content item.") }
         
         contentItem.title = dataItem.title
-        contentItem.displayURL = dataItem.displayURL
-        contentItem.imageURL = dataItem.imageURL
+        contentItem.displayURL = dataItem.displayURL as URL
+        contentItem.imageURL = dataItem.imageURL as URL
         contentItem.imageShape = imageShape
         
         return contentItem

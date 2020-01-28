@@ -27,7 +27,7 @@ class DataItemViewController: UIViewController {
     
     // MARK: Convenience
     
-    func configureWithDataItem(dataItem: DataItem) {
+    func configureWithDataItem(_ dataItem: DataItem) {
         self.dataItem = dataItem
     }
 }
