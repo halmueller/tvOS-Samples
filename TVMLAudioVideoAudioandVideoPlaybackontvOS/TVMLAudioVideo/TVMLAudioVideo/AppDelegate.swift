@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TVApplicationControllerDe
 
     // MARK: UIApplication Overrides
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
         
@@ -62,7 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TVApplicationControllerDe
     // MARK: TVApplicationControllerDelegate
     
     func appController(_ appController: TVApplicationController, didFinishLaunching options: [String: Any]?) {
-        print("\(#function) invoked with options: \(options)")
+        print("\(#function) invoked with options: \(String(describing: options))")
     }
     
     func appController(_ appController: TVApplicationController, didFail error: Error) {
@@ -70,6 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TVApplicationControllerDe
     }
     
     func appController(_ appController: TVApplicationController, didStop options: [String: Any]?) {
-        print("\(#function) invoked with options: \(options)")
+        print("\(#function) invoked with options: \(String(describing: options))")
     }
 }

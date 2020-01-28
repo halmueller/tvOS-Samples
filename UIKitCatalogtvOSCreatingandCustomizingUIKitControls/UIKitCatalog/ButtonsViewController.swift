@@ -39,18 +39,29 @@ class ButtonsViewController: UIViewController {
         
         // Set the button's title for normal state.
         let normalTitleAttributes = [
-            NSForegroundColorAttributeName: UIColor.blue,
-            NSStrikethroughStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue
+            convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): UIColor.blue,
+            convertFromNSAttributedStringKey(NSAttributedString.Key.strikethroughStyle): NSUnderlineStyle.single.rawValue
         ] as [String : Any]
-        let normalAttributedTitle = NSAttributedString(string: buttonTitle, attributes: normalTitleAttributes)
-        attributedTextButton.setAttributedTitle(normalAttributedTitle, for: UIControlState())
+        let normalAttributedTitle = NSAttributedString(string: buttonTitle, attributes: convertToOptionalNSAttributedStringKeyDictionary(normalTitleAttributes))
+        attributedTextButton.setAttributedTitle(normalAttributedTitle, for: UIControl.State())
         
         // Set the button's title for highlighted state.
         let highlightedTitleAttributes = [
-            NSForegroundColorAttributeName: UIColor.green,
-            NSStrikethroughStyleAttributeName: NSUnderlineStyle.styleThick.rawValue
+            convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): UIColor.green,
+            convertFromNSAttributedStringKey(NSAttributedString.Key.strikethroughStyle): NSUnderlineStyle.thick.rawValue
         ] as [String : Any]
-        let highlightedAttributedTitle = NSAttributedString(string: buttonTitle, attributes: highlightedTitleAttributes)
+        let highlightedAttributedTitle = NSAttributedString(string: buttonTitle, attributes: convertToOptionalNSAttributedStringKeyDictionary(highlightedTitleAttributes))
         attributedTextButton.setAttributedTitle(highlightedAttributedTitle, for: .highlighted)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         When the user clicks a Top Shelf item, the application will be asked
         to open the associated URL.
     */
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
         print("Application launched with URL: \(url)")
         return true
     }
