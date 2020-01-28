@@ -24,6 +24,8 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
             
             case .sectioned:
                 return sectionedTopShelfItems
+        @unknown default:
+            fatalError()
         }
     }
     
